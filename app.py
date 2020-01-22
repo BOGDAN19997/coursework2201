@@ -27,7 +27,7 @@ ENV = 'prod'
 
 
 app.config[
-        'SQLALCHEMY_DATABASE_URI'] = 'postgres://owwiyftiqxmksq:09737a44f178143dc8d174998458a0ba650d51ab42d08db12d24a44f775a26c6@ec2-3-220-86-239.compute-1.amazonaws.com:5432/d2b85aj2avnad1'
+        'SQLALCHEMY_DATABASE_URI'] = 'postgres://dadcybcbuqpcaj:8dc4368b65a31a0a5395e9ce9f45d82212c82ec5592c357a6330bc5e003f671c@ec2-52-2-43-242.compute-1.amazonaws.com:5432/d8htqbe0glqcup'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
