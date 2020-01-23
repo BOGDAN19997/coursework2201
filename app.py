@@ -80,7 +80,17 @@ class ormCommands(db.Model):
     pronunciation_date = Column(DateTime, default=datetime.datetime.now())
     rating = Column(Float)
     command_list_id = Column(Integer, ForeignKey('command_list.id'))
-    command_Relation_Ship = relationship("ormCommand_List", back_populates="commandRelationShip")
+    country_Relation_Ship = relationship("ormVoice", back_populates="countryRelationShip")
+
+
+   
+class ormCountrys(db.Model):
+    __tablename__ = 'country'
+    name = Column(String(15), primary_key = True)
+    foundation_year = Column(Integer)
+    goverment = Column(String(18))
+    president = Column(String(40))
+    command_Relation_Ship = relationship("ormVoice_Patterns", back_populates="commandRelationShip")
 
 
 @app.route('/')
@@ -132,6 +142,15 @@ def all_command():
                      "versions": row.versions,
                      "pronunciation_date": row.pronunciation_date, "rating": row.rating, "command_list_id": row.command_list_id})
     return render_template('allCommand.html', taglist_check=taglist_check, command=command, action="/all/command")
+
+@app.route('/all/country')
+def all_country():
+    taglist_check = "country"
+    command_db = db.session.query(ormCountrys).all()
+    command = []
+    for row in country_db:
+        country.append({"name": row.name, "foundation_year": row.foundation_year, "goverment": row.goverment , "president": row.president})
+    return render_template('allCountry.html', taglist_check=taglist_check, country=country, action="/all/country")
 
 
 @app.route('/create/voice_pattern', methods=['GET', 'POST'])
@@ -242,6 +261,38 @@ def create_command():
             check = False
             for row in ids:
                 if row.id == form.command_list_id.data:
+                    check = True
+
+            new_var = ormCommands(
+
+                taglist_check=form.taglist_check.data,
+                command_body=form.command_body.data,
+                expansion=form.expansion.data,
+                versions=form.versions.data,
+                rating=form.rating.data,
+                command_list_id=form.command_list_id.data
+            )
+            if check:
+                db.session.add(new_var)
+                db.session.commit()
+                return redirect(url_for('all_command'))
+
+    return render_template('create_command.html', form=form, form_name="New command", action="create/command")
+
+
+@app.route('/create/country', methods=['GET', 'POST'])
+def create_country():
+    form = CreateCountry()
+
+    if request.method == 'POST':
+        if form.validate() == False:
+            return render_template('create_country.html', form=form, form_name="New country", action="create/country")
+        else:
+
+            ids = db.session.query(ormCountry_List).all()
+            check = False
+            for row in ids:
+                if row.id == form.country_list_id.data:
                     check = True
 
             new_var = ormCommands(
